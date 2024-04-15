@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Document</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      width: 400px; /* Adjust width as needed */
+      margin: 0 auto; /* Center the form horizontally */
+    }
+
+    label {
+      margin-bottom: 5px;
+      display: block; /* Make labels on separate lines */
+    }
+
+    input[type="text"],
+    input[type="file"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box; /* Include padding in width calculation */
+    }
+
+    button {
+      background-color: #4CAF50; /* Green */
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      background-color: #3e8e41; /* Darker green on hover */
+    }
+  </style>
+</head>
+<body>
+  <h1>Upload Document</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="id_name">Name:</label>
+    {{ form.name }}
+    <br>
+    <label for="id_file">File:</label>
+    {{ form.file }}
+    <br>
+    <button type="submit">Upload</button>
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            <strong>Error!</strong> {{ form.non_field_errors }}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% endif %}
+  </form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+<!-- =================================================================================== -->
+View document 
+<!-- document_list.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document List</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.min.css"> -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+    
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    
+        ul {
+            list-style: none; /* Remove default bullet points */
+            padding: 0;
+            margin: 0;
+        }
+    
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+    
+        button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    
+        button:hover {
+            background-color: #3e8e41; /* Darker green on hover */
+        }
+    </style>
+    
+</head>
+<body>
+    <!-- <h1>Document List</h1>
+    <ul>
+        {% for document in documents %}
+            <li>
+                {{ document.name }}
+                <form action="{% url 'download_pdf' document_id=document.id %}" method="get" style="display: inline;">
+                    <button type="submit">Download</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul> -->
+    <h1>Document List</h1>
+    <table id="document_table">
+    <thead>
+        <tr>
+        <th>Name</th>
+        <th>Download</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for document in documents %}
+        <tr>
+            <td>{{ document.name }}</td>
+            <td>
+            <form action="{% url 'download_pdf' document_id=document.id %}" method="get">
+                <button type="submit">Download</button>
+            </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+
+    <!-- Include jQuery -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    <!-- Include DataTables JavaScript -->
+    <!-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.6/js/jquery.dataTables.min.js"></script> -->
+
+    <script>
+        $(document).ready(function() {
+          $('#document_table').DataTable();
+        });
+    </script>
+        
+</body>
+</html>

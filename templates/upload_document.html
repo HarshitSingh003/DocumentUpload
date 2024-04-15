@@ -1,0 +1,81 @@
+<!-- upload_document.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Upload Document{% endblock %}
+
+{% block content %}
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      width: 400px; /* Adjust width as needed */
+      margin: 0 auto; /* Center the form horizontally */
+    }
+
+    label {
+      margin-bottom: 5px;
+      display: block; /* Make labels on separate lines */
+    }
+
+    input[type="text"],
+    input[type="file"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box; /* Include padding in width calculation */
+    }
+
+    button {
+      background-color: #4CAF50; /* Green */
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      background-color: #3e8e41; /* Darker green on hover */
+    }
+  </style>
+<div class="container">
+    <h1>Upload Document</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="id_name">Name:</label>
+    {{ form.name }}
+    <br>
+    <label for="id_file">File:</label>
+    {{ form.file }}
+    <br>
+    <button type="submit">Upload</button>
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            <strong>Error!</strong> {{ form.non_field_errors }}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% endif %}
+  </form>
+</div>
+{% endblock %}
