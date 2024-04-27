@@ -3,6 +3,8 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login, logout
 
 def login_view(request):
+    if request.user.is_authenticated:
+        logout(request)
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
